@@ -1,0 +1,694 @@
+{
+	"info": {
+		"_postman_id": "a54c9b30-c415-499c-af6b-74f54c622342",
+		"name": "AI Coach - Generate Plan API",
+		"description": "Test suite for POST /generate-plan/ (AI Coach Agent). Includes functional, validation, and robustness tests with assertions.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45061434",
+		"_collection_link": "https://basel-3230671.postman.co/workspace/basel's-Workspace~6a959c3d-763c-4cd9-8d45-160866bc1e73/collection/45061434-a54c9b30-c415-499c-af6b-74f54c622342?action=share&source=collection_link&creator=45061434"
+	},
+	"item": [
+		{
+			"name": "Functional - Success",
+			"item": [
+				{
+					"name": "TC1 Happy path – multiple items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// ===== Schema for your current response shape =====",
+									"const schema = {",
+									"  type: \"object\",",
+									"  required: [\"user_id\",\"plan\"],",
+									"  properties: {",
+									"    user_id: { type: \"string\" },",
+									"    plan: {",
+									"      type: \"array\",",
+									"      items: {",
+									"        type: \"object\",",
+									"        required: [\"step\",\"swap_away\",\"receive\"],",
+									"        properties: {",
+									"          step: { type: \"integer\" },",
+									"          swap_away: { type: \"string\" },",
+									"          receive: { type: \"string\" }",
+									"        }",
+									"      }",
+									"    }",
+									"  },",
+									"  additionalProperties: true",
+									"};",
+									"",
+									"pm.test(\"Schema valid\", function () {",
+									"  const res = pm.response.json();",
+									"  pm.expect(tv4.validate(res, schema), tv4.error).to.be.true;",
+									"});",
+									"",
+									"const reqBody = (() => { try { return JSON.parse(pm.request.body.raw); } catch(e){ return {}; } })();",
+									"const res = pm.response.json();",
+									"const steps = Array.isArray(res.plan) ? res.plan : [];",
+									"",
+									"// Ensure we got at least one step",
+									"pm.test(\"Steps exist\", function () {",
+									"  pm.expect(steps.length).to.be.above(0);",
+									"});",
+									"",
+									"// Max steps respected (fallback to steps.length if request didn't send max_steps)",
+									"pm.test(\"Max steps respected\", function () {",
+									"  const max = Number.isInteger(reqBody.max_steps) ? reqBody.max_steps : steps.length;",
+									"  pm.expect(steps.length).to.be.at.most(max);",
+									"});",
+									"",
+									"// Target achieved: last 'receive' equals requested target (case/space-insensitive)",
+									"pm.test(\"Target achieved\", function () {",
+									"  const lastReceive = steps.length ? (steps[steps.length-1].receive || \"\") : \"\";",
+									"  const target = String(reqBody.target_item || \"\").trim().toLowerCase();",
+									"  pm.expect(lastReceive.trim().toLowerCase()).to.eql(target);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": \"test_user_123\",\n  \"interests\": [\n    \"electronics\",\n    \"photography\"\n  ],\n  \"initial_items\": [\n    \"samsung a54\",\n    \"Canon AE-1\"\n  ],\n  \"target_item\": \"samsung S24 ultra\",\n  \"max_steps\": 5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/generate-plan/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"generate-plan",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC2 Single initial item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// ===== Schema for your current response shape =====",
+									"const schema = {",
+									"  type: \"object\",",
+									"  required: [\"user_id\",\"plan\"],",
+									"  properties: {",
+									"    user_id: { type: \"string\" },",
+									"    plan: {",
+									"      type: \"array\",",
+									"      items: {",
+									"        type: \"object\",",
+									"        required: [\"step\",\"swap_away\",\"receive\"],",
+									"        properties: {",
+									"          step: { type: \"integer\" },",
+									"          swap_away: { type: \"string\" },",
+									"          receive: { type: \"string\" }",
+									"        }",
+									"      }",
+									"    }",
+									"  },",
+									"  additionalProperties: true",
+									"};",
+									"",
+									"pm.test(\"Schema valid\", function () {",
+									"  const res = pm.response.json();",
+									"  pm.expect(tv4.validate(res, schema), tv4.error).to.be.true;",
+									"});",
+									"",
+									"const reqBody = (() => { try { return JSON.parse(pm.request.body.raw); } catch(e){ return {}; } })();",
+									"const res = pm.response.json();",
+									"const steps = Array.isArray(res.plan) ? res.plan : [];",
+									"",
+									"// Ensure we got at least one step",
+									"pm.test(\"Steps exist\", function () {",
+									"  pm.expect(steps.length).to.be.above(0);",
+									"});",
+									"",
+									"// Max steps respected (fallback to steps.length if request didn't send max_steps)",
+									"pm.test(\"Max steps respected\", function () {",
+									"  const max = Number.isInteger(reqBody.max_steps) ? reqBody.max_steps : steps.length;",
+									"  pm.expect(steps.length).to.be.at.most(max);",
+									"});",
+									"",
+									"// Target achieved: last 'receive' equals requested target (case/space-insensitive)",
+									"pm.test(\"Target achieved\", function () {",
+									"  const lastReceive = steps.length ? (steps[steps.length-1].receive || \"\") : \"\";",
+									"  const target = String(reqBody.target_item || \"\").trim().toLowerCase();",
+									"  pm.expect(lastReceive.trim().toLowerCase()).to.eql(target);",
+									"});",
+									"",
+									"// (Optional) Step numbers are 1..N",
+									"pm.test(\"Steps numbered sequentially\", function () {",
+									"  for (let i = 0; i < steps.length; i++) {",
+									"    pm.expect(steps[i].step).to.eql(i + 1);",
+									"  }",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": \"single_item_user\",\n  \"interests\": [\n    \"electronics\"\n  ],\n  \"initial_items\": [\n    \"samsung a54\"\n  ],\n  \"target_item\": \"samsung S24 ultra\",\n  \"max_steps\": 5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/generate-plan/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"generate-plan",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC3 Target already owned",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// ---- Parse safely\r",
+									"let res;\r",
+									"try { res = pm.response.json(); } catch (_) { res = {}; }\r",
+									"\r",
+									"const reqBody  = (() => { try { return JSON.parse(pm.request.body.raw); } catch(e){ return {}; } })();\r",
+									"const steps    = Array.isArray(res.plan) ? res.plan : [];\r",
+									"const norm     = s => String(s || \"\").trim().toLowerCase();\r",
+									"const target   = norm(reqBody.target_item);\r",
+									"const initial  = Array.isArray(reqBody.initial_items) ? reqBody.initial_items.map(norm) : [];\r",
+									"const owned    = target && initial.includes(target);\r",
+									"\r",
+									"// --- STRICT RULES ---\r",
+									"pm.test(\"TC success rule: if target already owned => no steps\", () => {\r",
+									"  if (owned) {\r",
+									"    pm.expect(steps.length, \"Plan must be empty when target is already owned\").to.eql(0);\r",
+									"  } else {\r",
+									"    pm.expect(steps.length, \"Expected at least one step\").to.be.above(0);\r",
+									"  }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Plan must end at target (only when not already owned)\", () => {\r",
+									"  if (!owned) {\r",
+									"    const lastReceive = steps.length ? norm(steps[steps.length - 1].receive) : \"\";\r",
+									"    pm.expect(lastReceive, \"Plan must end at target item\").to.eql(target);\r",
+									"  }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": \"target_owner\",\n  \"interests\": [\n    \"electronics\"\n  ],\n  \"initial_items\": [\n    \"samsung S24 ultra\"\n  ],\n  \"target_item\": \"samsung S24 ultra\",\n  \"max_steps\": 5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/generate-plan/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"generate-plan",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC4 Deduplicate & normalize items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"// ===== Schema for your current response shape =====",
+									"const schema = {",
+									"  type: \"object\",",
+									"  required: [\"user_id\",\"plan\"],",
+									"  properties: {",
+									"    user_id: { type: \"string\" },",
+									"    plan: {",
+									"      type: \"array\",",
+									"      items: {",
+									"        type: \"object\",",
+									"        required: [\"step\",\"swap_away\",\"receive\"],",
+									"        properties: {",
+									"          step: { type: \"integer\" },",
+									"          swap_away: { type: \"string\" },",
+									"          receive: { type: \"string\" }",
+									"        }",
+									"      }",
+									"    }",
+									"  },",
+									"  additionalProperties: true",
+									"};",
+									"",
+									"pm.test(\"Schema valid\", function () {",
+									"  const res = pm.response.json();",
+									"  pm.expect(tv4.validate(res, schema), tv4.error).to.be.true;",
+									"});",
+									"",
+									"const reqBody = (() => { try { return JSON.parse(pm.request.body.raw); } catch(e){ return {}; } })();",
+									"const res = pm.response.json();",
+									"const steps = Array.isArray(res.plan) ? res.plan : [];",
+									"",
+									"// Ensure we got at least one step",
+									"pm.test(\"Steps exist\", function () {",
+									"  pm.expect(steps.length).to.be.above(0);",
+									"});",
+									"",
+									"// Max steps respected (fallback to steps.length if request didn't send max_steps)",
+									"pm.test(\"Max steps respected\", function () {",
+									"  const max = Number.isInteger(reqBody.max_steps) ? reqBody.max_steps : steps.length;",
+									"  pm.expect(steps.length).to.be.at.most(max);",
+									"});",
+									"",
+									"// Target achieved: last 'receive' equals requested target (case/space-insensitive)",
+									"pm.test(\"Target achieved\", function () {",
+									"  const lastReceive = steps.length ? (steps[steps.length-1].receive || \"\") : \"\";",
+									"  const target = String(reqBody.target_item || \"\").trim().toLowerCase();",
+									"  pm.expect(lastReceive.trim().toLowerCase()).to.eql(target);",
+									"});",
+									"",
+									"// === TC4-specific: deduplicate / normalize initial items ===",
+									"// (We send duplicates in TC4 request, e.g., [\"Canon AE-1\",\"canon ae-1\"])",
+									"pm.test(\"Initial items were normalized/deduped\", function () {",
+									"  const init = Array.isArray(reqBody.initial_items) ? reqBody.initial_items.map(s => String(s).toLowerCase().trim()) : [];",
+									"  // Confirm test data actually contains duplicates ignoring case",
+									"  const uniqueInit = [...new Set(init)];",
+									"  pm.expect(init.length).to.be.greaterThan(uniqueInit.length); // otherwise this TC isn't meaningful",
+									"",
+									"  // Verify the plan does not use both case-variants as separate items",
+									"  const swapAwaysLower = steps.map(s => String(s.swap_away || \"\").toLowerCase().trim());",
+									"  // For each unique initial item, ensure its case-variant appears at most once in the plan",
+									"  uniqueInit.forEach(u => {",
+									"    const count = swapAwaysLower.filter(x => x === u).length;",
+									"    pm.expect(count, `duplicate use of '${u}'`).to.be.at.most(1);",
+									"  });",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": \"dupe_norm\",\n  \"interests\": [\n    \"photography\"\n  ],\n  \"initial_items\": [\n    \"Canon AE-1\",\n    \"canon ae-1\"\n  ],\n  \"target_item\": \"samsung S24 ultra\",\n  \"max_steps\": 5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/generate-plan/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"generate-plan",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Validation & Errors",
+			"item": [
+				{
+					"name": "TC5 Missing target_item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"400 parse error for malformed JSON\", function(){",
+									"  pm.expect([400, 422]).to.include(pm.response.code);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": \"bad_missing_target\",\n  \"interests\": [\n    \"electronics\"\n  ],\n  \"initial_items\": [\n    \"samsung a54\"\n  ],\n  \"max_steps\": 5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/generate-plan/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"generate-plan",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC6 Wrong types",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"400 parse error for malformed JSON\", function(){",
+									"  pm.expect([400, 422]).to.include(pm.response.code);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": \"bad_types\",\n  \"interests\": \"electronics\",\n  \"initial_items\": \"samsung a54\",\n  \"target_item\": \"samsung S24 ultra\",\n  \"max_steps\": 5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/generate-plan/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"generate-plan",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC7 Empty initial_items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"400 parse error for malformed JSON\", function(){",
+									"  pm.expect([400, 422]).to.include(pm.response.code);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": \"empty_initial\",\n  \"interests\": [\n    \"electronics\"\n  ],\n  \"initial_items\": [],\n  \"target_item\": \"samsung S24 ultra\",\n  \"max_steps\": 5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/generate-plan/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"generate-plan",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC8 max_steps boundary = 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const status = pm.response.code;",
+									"pm.test(\"Either 200 within 1 step or 422 UNREACHABLE\", function(){",
+									"  pm.expect([200, 422]).to.include(status);",
+									"});",
+									"if (pm.response.code === 200) {",
+									"  const res = pm.response.json();",
+									"  pm.expect(res.plan.length).to.be.at.most(1);",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": \"one_step\",\n  \"interests\": [\n    \"electronics\"\n  ],\n  \"initial_items\": [\n    \"samsung S23 ultra\"\n  ],\n  \"target_item\": \"samsung S24 ultra\",\n  \"max_steps\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/generate-plan/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"generate-plan",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC9 Invalid max_steps (0)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"400 for invalid max_steps\", function(){",
+									"  pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": \"bad_max\",\n  \"interests\": [\n    \"electronics\"\n  ],\n  \"initial_items\": [\n    \"samsung a54\"\n  ],\n  \"target_item\": \"samsung S24 ultra\",\n  \"max_steps\": 0\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/generate-plan/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"generate-plan",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC10 Non‑ASCII items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"JSON response and no crash\", function(){",
+									"  pm.response.to.be.withBody;",
+									"  pm.response.to.have.header(\"Content-Type\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": \"unicode_user\",\n  \"interests\": [\n    \"\\u0627\\u0644\\u0625\\u0644\\u0643\\u062a\\u0631\\u0648\\u0646\\u064a\\u0627\\u062a\",\n    \"c\\u00e1mara\"\n  ],\n  \"initial_items\": [\n    \"\\u0633\\u0648\\u0646\\u064a \\u03b17\",\n    \"Nikon Df \\u2013 edici\\u00f3n cl\\u00e1sica\"\n  ],\n  \"target_item\": \"samsung S24 ultra\",\n  \"max_steps\": 5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/generate-plan/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"generate-plan",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TC11 Malformed JSON",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"400 parse error for malformed JSON\", function(){",
+									"  pm.expect([400, 422]).to.include(pm.response.code);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"user_id\": \"broken\", "
+						},
+						"url": {
+							"raw": "{{base_url}}/generate-plan/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"generate-plan",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://aicoach-714849252637.europe-west1.run.app",
+			"type": "string"
+		}
+	]
+}

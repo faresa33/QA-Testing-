@@ -1,0 +1,459 @@
+{
+	"id": "43091575-2b03-4e61-bea7-fd7edeb0ea16",
+	"name": "AI Coach - Generate Plan API",
+	"timestamp": "2025-08-28T07:40:57.533Z",
+	"collection_id": "45061434-a54c9b30-c415-499c-af6b-74f54c622342",
+	"folder_id": 0,
+	"environment_id": "45061434-6666bc70-68fc-4e89-819e-e2dcc9fa65f1",
+	"totalPass": 23,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2025-08-28T07:40:25.983Z",
+	"totalFail": 4,
+	"results": [
+		{
+			"id": "4160ab1f-e12b-4469-9135-91ad84405057",
+			"name": "TC1 Happy path – multiple items",
+			"url": "https://aicoach-714849252637.europe-west1.run.app/generate-plan/",
+			"time": 5212,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status 200": true,
+				"Schema valid": true,
+				"Steps exist": true,
+				"Max steps respected": true,
+				"Target achieved": true
+			},
+			"testPassFailCounts": {
+				"Status 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Schema valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Steps exist": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Max steps respected": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Target achieved": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				5212
+			],
+			"allTests": [
+				{
+					"Status 200": true,
+					"Schema valid": true,
+					"Steps exist": true,
+					"Max steps respected": true,
+					"Target achieved": true
+				}
+			]
+		},
+		{
+			"id": "e1affdf9-cc7e-427b-b64a-3f2bf9442dab",
+			"name": "TC2 Single initial item",
+			"url": "https://aicoach-714849252637.europe-west1.run.app/generate-plan/",
+			"time": 4320,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status 200": true,
+				"Schema valid": true,
+				"Steps exist": true,
+				"Max steps respected": true,
+				"Target achieved": true,
+				"Steps numbered sequentially": true
+			},
+			"testPassFailCounts": {
+				"Status 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Schema valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Steps exist": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Max steps respected": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Target achieved": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Steps numbered sequentially": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4320
+			],
+			"allTests": [
+				{
+					"Status 200": true,
+					"Schema valid": true,
+					"Steps exist": true,
+					"Max steps respected": true,
+					"Target achieved": true,
+					"Steps numbered sequentially": true
+				}
+			]
+		},
+		{
+			"id": "3d6bf17c-039e-469a-aaea-83b208e899ae",
+			"name": "TC3 Target already owned",
+			"url": "https://aicoach-714849252637.europe-west1.run.app/generate-plan/",
+			"time": 1810,
+			"responseCode": {
+				"code": 500,
+				"name": "Internal Server Error"
+			},
+			"tests": {
+				"Status 200": false,
+				"TC success rule: if target already owned => no steps": true,
+				"Plan must end at target (only when not already owned)": true
+			},
+			"testPassFailCounts": {
+				"Status 200": {
+					"pass": 0,
+					"fail": 1
+				},
+				"TC success rule: if target already owned => no steps": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Plan must end at target (only when not already owned)": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				1810
+			],
+			"allTests": [
+				{
+					"Status 200": false,
+					"TC success rule: if target already owned => no steps": true,
+					"Plan must end at target (only when not already owned)": true
+				}
+			]
+		},
+		{
+			"id": "b95ec05e-c4c2-41e0-8b94-3905081659ee",
+			"name": "TC4 Deduplicate & normalize items",
+			"url": "https://aicoach-714849252637.europe-west1.run.app/generate-plan/",
+			"time": 3125,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status 200": true,
+				"Schema valid": true,
+				"Steps exist": true,
+				"Max steps respected": true,
+				"Target achieved": true,
+				"Initial items were normalized/deduped": false
+			},
+			"testPassFailCounts": {
+				"Status 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Schema valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Steps exist": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Max steps respected": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Target achieved": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Initial items were normalized/deduped": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				3125
+			],
+			"allTests": [
+				{
+					"Status 200": true,
+					"Schema valid": true,
+					"Steps exist": true,
+					"Max steps respected": true,
+					"Target achieved": true,
+					"Initial items were normalized/deduped": false
+				}
+			]
+		},
+		{
+			"id": "84ff5fd0-9e36-4aab-b1df-4731017d580d",
+			"name": "TC5 Missing target_item",
+			"url": "https://aicoach-714849252637.europe-west1.run.app/generate-plan/",
+			"time": 90,
+			"responseCode": {
+				"code": 422,
+				"name": "unknown"
+			},
+			"tests": {
+				"400 parse error for malformed JSON": true
+			},
+			"testPassFailCounts": {
+				"400 parse error for malformed JSON": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				90
+			],
+			"allTests": [
+				{
+					"400 parse error for malformed JSON": true
+				}
+			]
+		},
+		{
+			"id": "cb57f1e9-ac1e-47db-a743-0759190a2b8f",
+			"name": "TC6 Wrong types",
+			"url": "https://aicoach-714849252637.europe-west1.run.app/generate-plan/",
+			"time": 94,
+			"responseCode": {
+				"code": 422,
+				"name": "unknown"
+			},
+			"tests": {
+				"400 parse error for malformed JSON": true
+			},
+			"testPassFailCounts": {
+				"400 parse error for malformed JSON": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				94
+			],
+			"allTests": [
+				{
+					"400 parse error for malformed JSON": true
+				}
+			]
+		},
+		{
+			"id": "dc5b24ae-133c-4c85-8550-7d756d793e9d",
+			"name": "TC7 Empty initial_items",
+			"url": "https://aicoach-714849252637.europe-west1.run.app/generate-plan/",
+			"time": 11130,
+			"responseCode": {
+				"code": 500,
+				"name": "Internal Server Error"
+			},
+			"tests": {
+				"400 parse error for malformed JSON": false
+			},
+			"testPassFailCounts": {
+				"400 parse error for malformed JSON": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				11130
+			],
+			"allTests": [
+				{
+					"400 parse error for malformed JSON": false
+				}
+			]
+		},
+		{
+			"id": "9ccdf2bc-086f-43e2-abcd-70a088298f7d",
+			"name": "TC8 max_steps boundary = 1",
+			"url": "https://aicoach-714849252637.europe-west1.run.app/generate-plan/",
+			"time": 2173,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Either 200 within 1 step or 422 UNREACHABLE": true
+			},
+			"testPassFailCounts": {
+				"Either 200 within 1 step or 422 UNREACHABLE": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				2173
+			],
+			"allTests": [
+				{
+					"Either 200 within 1 step or 422 UNREACHABLE": true
+				}
+			]
+		},
+		{
+			"id": "b4a3f944-d2a6-4246-a365-19dcda9e27ca",
+			"name": "TC9 Invalid max_steps (0)",
+			"url": "https://aicoach-714849252637.europe-west1.run.app/generate-plan/",
+			"time": 1541,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"400 for invalid max_steps": false
+			},
+			"testPassFailCounts": {
+				"400 for invalid max_steps": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				1541
+			],
+			"allTests": [
+				{
+					"400 for invalid max_steps": false
+				}
+			]
+		},
+		{
+			"id": "5a590015-5ca4-49c3-9534-8f9ce6c9c2e3",
+			"name": "TC10 Non‑ASCII items",
+			"url": "https://aicoach-714849252637.europe-west1.run.app/generate-plan/",
+			"time": 504,
+			"responseCode": {
+				"code": 500,
+				"name": "Internal Server Error"
+			},
+			"tests": {
+				"JSON response and no crash": true
+			},
+			"testPassFailCounts": {
+				"JSON response and no crash": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				504
+			],
+			"allTests": [
+				{
+					"JSON response and no crash": true
+				}
+			]
+		},
+		{
+			"id": "9557944d-155a-466c-9765-c1fd66e54a17",
+			"name": "TC11 Malformed JSON",
+			"url": "https://aicoach-714849252637.europe-west1.run.app/generate-plan/",
+			"time": 80,
+			"responseCode": {
+				"code": 422,
+				"name": "unknown"
+			},
+			"tests": {
+				"400 parse error for malformed JSON": true
+			},
+			"testPassFailCounts": {
+				"400 parse error for malformed JSON": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				80
+			],
+			"allTests": [
+				{
+					"400 parse error for malformed JSON": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 30079,
+	"collection": {
+		"requests": [
+			{
+				"id": "4160ab1f-e12b-4469-9135-91ad84405057",
+				"method": "POST"
+			},
+			{
+				"id": "e1affdf9-cc7e-427b-b64a-3f2bf9442dab",
+				"method": "POST"
+			},
+			{
+				"id": "3d6bf17c-039e-469a-aaea-83b208e899ae",
+				"method": "POST"
+			},
+			{
+				"id": "b95ec05e-c4c2-41e0-8b94-3905081659ee",
+				"method": "POST"
+			},
+			{
+				"id": "84ff5fd0-9e36-4aab-b1df-4731017d580d",
+				"method": "POST"
+			},
+			{
+				"id": "cb57f1e9-ac1e-47db-a743-0759190a2b8f",
+				"method": "POST"
+			},
+			{
+				"id": "dc5b24ae-133c-4c85-8550-7d756d793e9d",
+				"method": "POST"
+			},
+			{
+				"id": "9ccdf2bc-086f-43e2-abcd-70a088298f7d",
+				"method": "POST"
+			},
+			{
+				"id": "b4a3f944-d2a6-4246-a365-19dcda9e27ca",
+				"method": "POST"
+			},
+			{
+				"id": "5a590015-5ca4-49c3-9534-8f9ce6c9c2e3",
+				"method": "POST"
+			},
+			{
+				"id": "9557944d-155a-466c-9765-c1fd66e54a17",
+				"method": "POST"
+			}
+		]
+	}
+}
